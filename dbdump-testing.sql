@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.25, for Linux (x86_64)
 --
--- Host: localhost    Database: boilerplate_testing
+-- Host: localhost    Database: boilerplate-testing
 -- ------------------------------------------------------
 -- Server version	5.7.25-0ubuntu0.16.04.2
 
@@ -26,18 +26,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fname` varchar(64) DEFAULT NULL,
   `lname` varchar(64) DEFAULT NULL,
-  `username` varchar(64) DEFAULT NULL,
-  `password` varchar(128) DEFAULT NULL,
-  `token` varchar(16) DEFAULT NULL,
-  `smsNumber` varchar(32) DEFAULT NULL,
-  `email` varchar(64) NOT NULL,
-  `pushNotifId` varchar(64) DEFAULT NULL,
-  `role` enum('user', 'admin') DEFAULT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -47,7 +36,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Demo','User','demo','$2b$08$z/2Ne0/xYAcCICMJ3ZBT.udbLzHKqDC9fWl6sG997e2CX0ctFZ5P2',NULL,'(510) 295-9297','amagid@eradani.com',NULL,'admin','2019-02-01 21:50:07','2019-02-01 21:50:07',NULL);
+INSERT INTO `users` VALUES (1,'Demo','User');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-08 18:00:53
+-- Dump completed on 2019-02-08 18:00:42

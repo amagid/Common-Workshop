@@ -10,7 +10,7 @@ function createEmployee(employeeData) {
                 fname,
                 lname
         })
-        .spread((createdEmployee) => {
+        .then((createdEmployee) => {
             return {
                 message: "Employee Created Successfully",
                 createdEmployeeId: createdEmployee.id

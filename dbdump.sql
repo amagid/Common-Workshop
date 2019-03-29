@@ -16,39 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `employees`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `employees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
+CREATE TABLE `employees` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fname` varchar(64) DEFAULT NULL,
   `lname` varchar(64) DEFAULT NULL,
-  `username` varchar(64) DEFAULT NULL,
-  `password` varchar(128) DEFAULT NULL,
-  `token` varchar(16) DEFAULT NULL,
-  `smsNumber` varchar(32) DEFAULT NULL,
-  `email` varchar(64) NOT NULL,
-  `pushNotifId` varchar(64) DEFAULT NULL,
-  `role` enum('viewer','operator','company','admin','panel','factory') DEFAULT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  `deletedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `employees`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Demo','User','demo','$2b$08$z/2Ne0/xYAcCICMJ3ZBT.udbLzHKqDC9fWl6sG997e2CX0ctFZ5P2',NULL,'(510) 295-9297','amagid@eradani.com',NULL,'admin','2019-02-01 21:50:07','2019-02-01 21:50:07',NULL);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `employees` WRITE;
+/*!40000 ALTER TABLE `employees` DISABLE KEYS */;
+INSERT INTO `employees` VALUES (1,'Demo','Employee');
+/*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
