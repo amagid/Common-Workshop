@@ -3,25 +3,12 @@ const Employee = require('../models/Employee');
 const Promise = require('bluebird');
 const APIError = require('../APIError');
 
-function createEmployee(userData, currentEmployee) {
-    const { fname, lname, username, pass, role } = userData;
-    const verificationToken = shortId.generate();
-    if (currentEmployee.role !== "admin") {
-        return Promise.reject(APIError(403, "Only Admins can create Employees"));
-    }
-    if (role && currentEmployee.role && currentEmployee.role !== "admin" && !isPermissionEqualOrHigher(role, currentEmployee.role)) {
-        return Promise.reject(APIError(403, "You may not give a Employee more permission than you yourself have"));
-    }
-    return Promise.all([pass ? password.encrypt(pass) : Promise.resolve(null)])
-        .spread((hash) => {
-            return Employee.create({
+function createEmployee(employeeData) {
+    const { fname, lname } = employeeData;
+
+    return Employee.create({
                 fname,
-                lname,
-                username,
-                password: hash,
-                role,
-                token: verificationToken
-            });
+                lname
         })
         .spread((createdEmployee) => {
             return {
@@ -30,50 +17,40 @@ function createEmployee(userData, currentEmployee) {
             };
         })
         .catch(err => {
-            if (err.name === 'SequelizeUniqueConstraintError') {
-                throw APIError(400, 'Employeename Must Be Unique', { send: { username: 'NotUnique' } });
-            }
-            //TODO: More detailed error handling
             throw APIError(err.status || 500, err.message || "Employee Creation Failed", err);
         });
 }
 
-function getEmployeeInfo(userId) {
-    return Employee.findById(userId, { paranoid: false })
-        .then(user => {
-            return Employee.extractReturnableFields(user);
+function getEmployeeInfo(employeeId) {
+    return Employee.findById(employeeId, { paranoid: false })
+        .then(employee => {
+            return Employee.extractReturnableFields(employee);
         })
         .catch(err => {
-            //TODO: More detailed error handling
             throw APIError(404, 'Employee Not Found', err);
         });
 }
 
 function getAllEmployees(includeInactive = false) {
     return Employee.findAll({ paranoid: !includeInactive })
-        .then(users => {
-            return Employee.extractReturnableFields(users);
+        .then(employees => {
+            return Employee.extractReturnableFields(employees);
         })
         .catch(err => {
             throw APIError(500, 'Employee Retrieval Failed', err);
         });
 }
 
-function updateEmployee(userId, data) {
-    const { fname, lname, username, pass, oldPass } = data;
-    let encryptPassword = pass ? password.encrypt(pass) : Promise.resolve(null);
-    let loginPromise = pass ? login(username, oldPass) : Promise.resolve(null);
-    return Promise.all([encryptPassword, loginPromise])
-        .spread((hash, loginResult) => {
-            let newEmployeeObj = {};
-            if (fname) newEmployeeObj.fname = fname;
-            if (lname) newEmployeeObj.lname = lname;
-            if (username) newEmployeeObj.username = username;
-            if (loginResult && loginResult.token && hash) newEmployeeObj.password = hash;
+function updateEmployee(employeeId, data) {
+    const { fname, lname } = data;
+    let newEmployeeObj = {};
+    if (fname) newEmployeeObj.fname = fname;
+    if (lname) newEmployeeObj.lname = lname;
+    if (employeename) newEmployeeObj.employeename = employeename;
+    if (loginResult && loginResult.token && hash) newEmployeeObj.password = hash;
 
-            return Promise.all([Employee.update(newEmployeeObj, { where: { id: parseInt(userId) }, paranoid: false }), loginResult && loginResult.token]);
-        })
-        .spread((result, newToken) => {
+    return Employee.update(newEmployeeObj, { where: { id: parseInt(employeeId) } })
+        .then((result) => {
             if (result[0]) {
                 return { message: 'Employee Updated Successfully', newToken };
             } else {
@@ -81,24 +58,22 @@ function updateEmployee(userId, data) {
             }
         })
         .catch(err => {
-            //TODO: More detailed error handling
             throw APIError(err.status || 500, err.message || "Employee Update Failed", err);
         });
 }
 
-function deleteEmployee(userId, force = false) {
-    return Promise.all([
-        Employee.destroy({ where: { id: parseInt(userId) }, force, limit: 1 })
-    ]).spread((result, jwtResult) => {
-        if (result) {
-            return [{ message: "Employee Deleted Successfully" }, jwtResult];
-        } else {
-            throw APIError(404, "Employee Not Found");
-        }
-    })
-    .catch(err => {
-        throw APIError(err.status || 500, err.message || "Employee Deletion Failed", err);
-    });
+function deleteEmployee(employeeId) {
+    return Employee.destroy({ where: { id: parseInt(employeeId) }, limit: 1 })
+        .then((result) => {
+            if (result) {
+                return { message: "Employee Deleted Successfully" };
+            } else {
+                throw APIError(404, "Employee Not Found");
+            }
+        })
+        .catch(err => {
+            throw APIError(err.status || 500, err.message || "Employee Deletion Failed", err);
+        });
 }
 
 module.exports = {
