@@ -30,18 +30,6 @@ const User = module.exports = db.define('user', {
 		type: Sequelize.DataTypes.STRING,
 		defaultValue: null
 	},
-	smsNumber: {
-		type: Sequelize.DataTypes.STRING,
-		defaultValue: null
-	},
-	email: {
-		type: Sequelize.DataTypes.STRING,
-		defaultValue: null
-	},
-	pushNotifId: {
-		type: Sequelize.DataTypes.STRING,
-		defaultValue: null
-	},
 	role: {
 		type: Sequelize.DataTypes.STRING,
 		defaultValue: null
@@ -80,9 +68,6 @@ function _extractReturnableFields(user, internalOnly) {
 		id: user.id,
 		fname: user.fname,
 		lname: user.lname,
-		smsNumber: user.smsNumber,
-		email: user.email,
-		pushNotifId: user.pushNotifId,
 		role: user.role
 	};
 	if (user.deletedAt) {
@@ -93,10 +78,6 @@ function _extractReturnableFields(user, internalOnly) {
 		output.username = user.username;
 		output.token = user.token;
 	}
-
-	// if (user.company) {
-	// 	output.company = Company.extractReturnableFields(user.company, internalOnly);
-	// }
 
 	return output;
 }
@@ -115,14 +96,7 @@ User.findByUsername = function(username) {
 }
 
 User.findByToken = function(token, includeEntity) {
-    var query;
-    if (includeEntity) {
-        query = User.findOne({ where: { token }, include: [{ model: Company, as: 'company' }]});
-    } else {
-        query = User.findOne({ where: { token }});
-    }
-
-    return query
+    return User.findOne({ where: { token }})
         .then(user => {
             if (!user) {
                 throw APIError(404, 'User Not Found');

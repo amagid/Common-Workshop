@@ -106,7 +106,7 @@ function completePasswordReset(token, newPassword) {
 }
 
 function createUser(userData, currentUser) {
-    const { fname, lname, username, pass, smsNumber, email, pushNotifId, role } = userData;
+    const { fname, lname, username, pass, role } = userData;
     const verificationToken = shortId.generate();
     if (currentUser.role !== "admin") {
         return Promise.reject(APIError(403, "Only Admins can create Users"));
@@ -115,23 +115,17 @@ function createUser(userData, currentUser) {
         return Promise.reject(APIError(403, "You may not give a User more permission than you yourself have"));
     }
     return Promise.all([pass ? password.encrypt(pass) : Promise.resolve(null)])
-        .spread((hash, companyExists) => {
+        .spread((hash) => {
             return User.create({
                 fname,
                 lname,
                 username,
                 password: hash,
-                smsNumber,
-                email,
-                pushNotifId,
                 role,
                 token: verificationToken
             });
         })
         .spread((createdUser) => {
-            return createdUser;
-        })
-        .spread((createdUser, mailResult) => {
             return {
                 message: "User Created Successfully",
                 createdUserId: createdUser.id
@@ -147,7 +141,7 @@ function createUser(userData, currentUser) {
 }
 
 function completeSignup(token, signupData) {
-    const { username, newPass, fname, lname, smsNumber, pushNotifId } = signupData;
+    const { username, newPass, fname, lname } = signupData;
     return User.findByToken(token)
         .then(userData => {
             if (!userData) {
@@ -159,7 +153,7 @@ function completeSignup(token, signupData) {
             }
         })
         .then(hash => {
-            return User.update({ username, password: hash, fname, lname, smsNumber, pushNotifId, token: null }, { where: { token } });
+            return User.update({ username, password: hash, fname, lname, token: null }, { where: { token } });
         })
         .then(result => {
             if (result) {
@@ -199,7 +193,7 @@ function getAllUsers(includeInactive = false) {
 }
 
 function updateUser(userId, data) {
-    const { fname, lname, username, pass, oldPass, smsNumber, email, pushNotifId } = data;
+    const { fname, lname, username, pass, oldPass } = data;
     let encryptPassword = pass ? password.encrypt(pass) : Promise.resolve(null);
     let loginPromise = pass ? login(username, oldPass) : Promise.resolve(null);
     return Promise.all([encryptPassword, loginPromise])
@@ -209,9 +203,6 @@ function updateUser(userId, data) {
             if (lname) newUserObj.lname = lname;
             if (username) newUserObj.username = username;
             if (loginResult && loginResult.token && hash) newUserObj.password = hash;
-            if (smsNumber) newUserObj.smsNumber = smsNumber;
-            if (email) newUserObj.email = email;
-            if (pushNotifId) newUserObj.pushNotifId = pushNotifId;
 
             return Promise.all([User.update(newUserObj, { where: { id: parseInt(userId) }, paranoid: false }), loginResult && loginResult.token]);
         })
@@ -245,7 +236,7 @@ function updateUserPermission(userId, newRole, currentUserRole) {
 
             return Promise.all([user.update({ role: newRole })]);
         })
-        .spread((updateResult, invalidationResult) => {
+        .spread((updateResult) => {
             if (!updateResult) {
                 throw APIError(400, "User Permission Not Updated. Either the User did not exist, or no changes were requested");
             } else {
