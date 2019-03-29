@@ -5,7 +5,7 @@ const respond = require('../../../middlewares/respond');
 
 module.exports = function mountEmployees(router) {
 
-    router.post('/create',
+    router.post('/',
         validate(validators.createEmployee),
         respond((req, res) => employees.createEmployee(req.body)));
 
