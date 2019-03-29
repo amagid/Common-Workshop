@@ -18,22 +18,6 @@ const User = module.exports = db.define('user', {
 		type: Sequelize.DataTypes.STRING,
 		defaultValue: null
 	},
-	username: {
-		type: Sequelize.DataTypes.STRING,
-		unique: true
-	},
-	password: {
-		type: Sequelize.DataTypes.STRING,
-		defaultValue: null
-	},
-	token: {
-		type: Sequelize.DataTypes.STRING,
-		defaultValue: null
-	},
-	role: {
-		type: Sequelize.DataTypes.STRING,
-		defaultValue: null
-	},
 	createdAt: {
 		type: Sequelize.DataTypes.DATE,
 		defaultValue: null
@@ -67,16 +51,10 @@ function _extractReturnableFields(user, internalOnly) {
 	const output = {
 		id: user.id,
 		fname: user.fname,
-		lname: user.lname,
-		role: user.role
+		lname: user.lname
 	};
 	if (user.deletedAt) {
 		output.deletedAt = user.deletedAt;
-	}
-
-	if (internalOnly) {
-		output.username = user.username;
-		output.token = user.token;
 	}
 
 	return output;
@@ -95,7 +73,7 @@ User.findByUsername = function(username) {
         });
 }
 
-User.findByToken = function(token, includeEntity) {
+User.findByToken = function(token) {
     return User.findOne({ where: { token }})
         .then(user => {
             if (!user) {
