@@ -17,7 +17,7 @@ module.exports = function mountUsers(router) {
         respond((req, res) => users.getAllUsers(req.query.includeInactive)));
 
     router.get('/self',
-        requirePermissionLevel.admin,
+        requirePermissionLevel.user,
         validate(validators.getOwnUserInfo),
         respond((req, res) => users.getUserInfo(req.user.id)));
         
@@ -32,7 +32,7 @@ module.exports = function mountUsers(router) {
         respond((req, res) => users.getUserInfo(req.params.userId)));
 
     router.patch('/self',
-        requirePermissionLevel.admin,
+        requirePermissionLevel.user,
         validate(validators.updateOwnUser),
         respond((req, res) => users.updateUser(req.user.id, req.body)));
 

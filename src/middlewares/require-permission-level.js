@@ -2,6 +2,7 @@ const Promise = require('bluebird');
 const logger = require('../services/logger');
 
 module.exports = {
+    user: requirePermissionLevel('user'),
     admin: requirePermissionLevel('admin'),
     isPermissionEqualOrHigher
 };
@@ -39,8 +40,8 @@ function requirePermissionLevel(level) {
 function isPermissionEqualOrHigher(level, userPermission) {
     if (userPermission === 'admin') {
         return true;
-    // } else if (userPermission === 'user') {
-    //     return level === 'user';
+    } else if (userPermission === 'user') {
+        return level === 'user';
     } else {
         logger.error(`Invalid Permission Level: "${userPermission}"`, 400, { suppliedPermissionLevel: userPermission, requiredPermissionLevel: level });
         return false;
