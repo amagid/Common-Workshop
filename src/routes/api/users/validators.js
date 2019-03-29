@@ -23,10 +23,6 @@ const createUser = [
     sanitize('role').toString()
 ];
 
-const getOwnUserInfo = [
-
-];
-
 const getUserInfo = [
     check('userId').exists().isInt(),
 
@@ -61,62 +57,17 @@ const updateUser = [
     sanitize('pushNotifId').toString()
 ];
 
-const updateOwnUser = [
-    check('fname').optional().isString(),
-    check('lname').optional().isString(),
-    check('username').optional().isString(),
-    check('pass').optional().isString(),
-    check('oldPass').optional().isString(),
-    check('smsNumber').optional().matches(regexes.phoneNumber),
-    check('email').optional().isString(),
-    check('pushNotifId').optional().isString(),
-
-    sanitize('fname').toString(),
-    sanitize('lname').toString(),
-    sanitize('username').toString(),
-    sanitize('pass').toString(),
-    sanitize('oldPass').toString(),
-    sanitize('smsNumber').toString(),
-    sanitize('email').toString(),
-    sanitize('pushNotifId').toString()
-];
-
-const updateUserPermission = [
-    check('userId').exists().isInt(),
-    check('role').exists().isIn(['viewer']),
-
-    sanitize('userId').toInt(),
-    sanitize('role').toString()
-];
-
 const deleteUser = [
     check('userId').exists().isInt(),
 
     sanitize('userId').toInt()
 ];
 
-const restoreUser = [
-    check('userId').exists().isInt(),
-
-    sanitize('userId').toInt()
-];
-
-const getUserInfoByToken = [
-    check('token').exists().isString(),
-
-    sanitize('token').toString()
-];
-
 
 module.exports = {
     createUser,
-    getOwnUserInfo,
     getUserInfo,
     getAllUsers,
     updateUser,
-    updateOwnUser,
-    updateUserPermission,
-    deleteUser,
-    restoreUser,
-    getUserInfoByToken
+    deleteUser
 };

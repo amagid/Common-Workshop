@@ -7,10 +7,7 @@ module.exports = {
     getUserInfo,
     getAllUsers,
     updateUser,
-    updateUserPermission,
-    deleteUser,
-    restoreUser,
-    getUserInfoByToken
+    deleteUser
 };
 
 function createUser(userData, currentUser) {
@@ -29,18 +26,6 @@ function updateUser(userId, data) {
     return users.updateUser(userId, data);
 }
 
-function updateUserPermission(userId, newRole, currentUserRole) {
-    return users.updateUserPermission(userId, newRole, currentUserRole);
-}
-
 function deleteUser(userId, force) {
     return users.deleteUser(userId, force);
-}
-
-function restoreUser(userId) {
-    return users.restoreUser(userId);
-}
-
-function getUserInfoByToken(token) {
-    return users.getUserInfoByToken(token);
 }
