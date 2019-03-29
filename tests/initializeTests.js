@@ -28,18 +28,6 @@ before(function() {
                 expect(response.error).to.be.false;
             });
     }).timeout(1000).retries(5);
-    
-    it('Got Admin auth token', function() {
-        return request('/auth')
-            .post('/')
-            .send(config.testing.credentials.admin)
-            .then(response => {
-                expect(response.status).to.equal(200);
-                expect(response.error).to.be.false;
-                expect(response.body.token).to.exist;
-                utils.setAuthToken('admin', response.body.token);
-            });
-    });
 
 });
 
