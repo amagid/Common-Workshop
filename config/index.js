@@ -2,7 +2,6 @@
 const dev = require('./development');
 const prod = require('./production');
 const test = require('./testing');
-const keys = require('./keys');
 dev.regexes = require('./regexes-dev');
 prod.regexes = require('./regexes-prod');
 
@@ -25,6 +24,5 @@ function get() {
 }
 
 module.exports = {
-    get,
-    getKeys: keys.getKeys
+    get
 };

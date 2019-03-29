@@ -3,21 +3,11 @@
         "port": 3000
     },
 
-    "jwt": {
-        "expiresIn": "1h"
-    },
-
     "db": {
         "name": "<Database Name>",
         "username": "<Database Username For Server>",
         "password": "<Database Password For Server>"
     },
-
-    "password": {
-        "saltRounds": 8
-    },
-
-    "protectedFields": ["password", "pass", "newPass", "newPassConf", "oldPass", "hash", "username", "secret", "signature", "initVector"],
 
     "urls": {
         "baseUrl": "http://localhost:3001/",

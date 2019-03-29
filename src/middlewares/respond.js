@@ -1,6 +1,5 @@
 const Promise = require('bluebird');
 const logger = require('../services/logger');
-const protectedFields = require('../../config').get().protectedFields;
 const APIError = require('../APIError');
 
 module.exports = respond;
@@ -21,7 +20,6 @@ module.exports = respond;
  * error will simply be caught here and wrapped in a Promise, rather than
  * bubbling up.
  * 
- * Nice, no?
  * @param {Function} handler The route handler as a middleware-style arrow function
  */
 function respond(handler) {
@@ -38,7 +36,6 @@ function respond(handler) {
         // Process the Promise-wrapped response
         return response
             .then(result => {
-                _filterProtectedFields(req);
                 logger.request({ message: "Request Handled Successfully", status: 200, additionalData: { route: req.originalUrl.split('?')[0], data: { query: Object.keys(req.query).length ? req.query : "No Query Data", params: Object.keys(req.params).length ? req.params : "No URL Param Data", body: Object.keys(req.body).length ? req.body : "No Body Data" }, user: !req.user || !Object.keys(req.user).length ? "Unidentified User" : req.user } });
                 if (result && result.responseIsRedirect) {
                     res.redirect(result.redirectTo);
@@ -47,7 +44,6 @@ function respond(handler) {
                 }
             })
             .catch(error => {
-                _filterProtectedFields(req);
                 if (error.status === 500) {
                     logger.error({ message: error.message, status: error.status, additionalData: { rawError: error, route: req.originalUrl.split('?')[0], data: { query: Object.keys(req.query).length ? req.query : "No Query Data", params: Object.keys(req.params).length ? req.params : "No URL Param Data", body: Object.keys(req.body).length ? req.body : "No Body Data" }, user: !req.user || !Object.keys(req.user).length ? "Unidentified User" : req.user } });
                 } else {
@@ -60,17 +56,4 @@ function respond(handler) {
                 res.status(500).json({ message: 'Unknown Error' });
         });
     };
-}
-
-/**
- * Delete any sensitive fields such as passwords from the data before we log the request in server logs.
- * 
- * @param {Request} req 
- */
-function _filterProtectedFields(req) {
-    for (let field of protectedFields) {
-        if (req.body[field]) { req.body[field] = "**PROTECTED FIELD**"; }
-        if (req.query[field]) { req.query[field] = "**PROTECTED FIELD**"; }
-        if (req.params[field]) { req.params[field] = "**PROTECTED FIELD**"; }
-    }
 }
