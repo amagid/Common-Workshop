@@ -46,13 +46,11 @@ function updateEmployee(employeeId, data) {
     let newEmployeeObj = {};
     if (fname) newEmployeeObj.fname = fname;
     if (lname) newEmployeeObj.lname = lname;
-    if (employeename) newEmployeeObj.employeename = employeename;
-    if (loginResult && loginResult.token && hash) newEmployeeObj.password = hash;
 
     return Employee.update(newEmployeeObj, { where: { id: parseInt(employeeId) } })
         .then((result) => {
             if (result[0]) {
-                return { message: 'Employee Updated Successfully', newToken };
+                return { message: 'Employee Updated Successfully' };
             } else {
                 return { message: 'Employee Not Updated. Either the Employee did not exist, or no changes were requested' };
             }
