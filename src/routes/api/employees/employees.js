@@ -42,12 +42,7 @@ function getAllEmployees(includeInactive = false) {
 }
 
 function updateEmployee(employeeId, data) {
-    const { fname, lname } = data;
-    let newEmployeeObj = {};
-    if (fname) newEmployeeObj.fname = fname;
-    if (lname) newEmployeeObj.lname = lname;
-
-    return Employee.update(newEmployeeObj, { where: { id: parseInt(employeeId) } })
+    return Employee.update(data, { where: { id: parseInt(employeeId) } })
         .then((result) => {
             if (result[0]) {
                 return { message: 'Employee Updated Successfully' };
