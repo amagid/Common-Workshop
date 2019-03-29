@@ -5,7 +5,6 @@ const User = require('../models/User');
 const Promise = require('bluebird');
 const APIError = require('../APIError');
 const shortId = require('shortid');
-const mailer = require('./mailer');
 const isPermissionEqualOrHigher = require('../middlewares/require-permission-level').isPermissionEqualOrHigher;
 
 function login(username, pass) {
@@ -57,7 +56,7 @@ function requestPasswordReset(username) {
             if (!updateResult) {
                 throw APIError(404, 'User Not Found', { reason: 'User Reset Token Update Failed' });
             }
-            return mailer.sendPasswordResetEmail(userData.email, userData.fname, userData.token);
+            return Promise.resolve({message: "Not Implemented"});
         })
         .catch(err => {
             throw APIError(err.status || 500, err.message || 'Password Reset Failed', err);
@@ -130,9 +129,7 @@ function createUser(userData, currentUser) {
             });
         })
         .spread((createdUser) => {
-            let mailPromise;
-            mailPromise = mailer.sendUserVerificationEmail(createdUser.email, createdUser.fname, verificationToken);
-            return Promise.all([createdUser, mailPromise]);
+            return createdUser;
         })
         .spread((createdUser, mailResult) => {
             return {

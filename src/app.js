@@ -18,7 +18,7 @@ const startup = db.connect()
     }).then(() => {
         return startServer();
     }).catch(err => {
-        console.log("ERROR ON STARTUP: ", JSON.stringify(err, null, 4));
+        console.log("ERROR ON STARTUP: ", JSON.stringify({ message: err.message, code: err.code, stack: err.stack }, null, 4));
     });
 
 function startServer() {
