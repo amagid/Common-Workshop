@@ -1,4 +1,4 @@
-const employees = require('./users');
+const employees = require('./employees');
 const validate = require('../../../middlewares/validate');
 const validators = require('./validators');
 const respond = require('../../../middlewares/respond');
