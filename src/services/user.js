@@ -31,7 +31,7 @@ function getEmployeeInfo(employeeId) {
         });
 }
 
-function getAllEmployees(includeInactive = false) {
+function getAllEmployees() {
     return Employee.findAll({ paranoid: !includeInactive })
         .then(employees => {
             return Employee.extractReturnableFields(employees);

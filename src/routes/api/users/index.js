@@ -1,29 +1,28 @@
-const users = require('./users');
+const employees = require('./users');
 const validate = require('../../../middlewares/validate');
 const validators = require('./validators');
-const requirePermissionLevel = require('../../../middlewares/require-permission-level');
 const respond = require('../../../middlewares/respond');
 
-module.exports = function mountUsers(router) {
+module.exports = function mountEmployees(router) {
 
     router.post('/create',
-        validate(validators.createUser),
-        respond((req, res) => users.createUser(req.body, req.user)));
+        validate(validators.createEmployee),
+        respond((req, res) => employees.createEmployee(req.body)));
 
     router.get('/',
-        validate(validators.getAllUsers),
-        respond((req, res) => users.getAllUsers(req.query.includeInactive)));
+        validate(validators.getAllEmployees),
+        respond((req, res) => employees.getAllEmployees()));
 
-    router.get('/:userId',
-        validate(validators.getUserInfo),
-        respond((req, res) => users.getUserInfo(req.params.userId)));
+    router.get('/:employeeId',
+        validate(validators.getEmployeeInfo),
+        respond((req, res) => employees.getEmployeeInfo(req.params.employeeId)));
 
-    router.patch('/:userId',
-        validate(validators.updateUser),
-        respond((req, res) => users.updateUser(req.params.userId, req.body)));
+    router.patch('/:employeeId',
+        validate(validators.updateEmployee),
+        respond((req, res) => employees.updateEmployee(req.params.employeeId, req.body)));
 
-    router.delete('/:userId',
-        validate(validators.deleteUser),
-        respond((req, res) => users.deleteUser(req.params.userId, false)));
+    router.delete('/:employeeId',
+        validate(validators.deleteEmployee),
+        respond((req, res) => employees.deleteEmployee(req.params.employeeId)));
 
 };

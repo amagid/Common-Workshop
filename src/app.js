@@ -57,7 +57,6 @@ function startServer() {
 }
 
 function setUpAPI() {
-    const decodeJWT = require('./middlewares/decode-jwt');
     const routes = require('./routes');
 
     //App settings
@@ -75,7 +74,6 @@ function setUpAPI() {
         type: 'application/octet-stream'
     }));
     app.use(cors());
-    app.use(decodeJWT);
     //Mount routes
     const router = express.Router();
     routes(router);

@@ -1,7 +1,7 @@
-const User = require('./User');
+const Employee = require('./Employee');
 
 module.exports = sync;
 
 function sync() {
-    return User.sync()
+    return Employee.sync()
 }
