@@ -17,21 +17,7 @@ const User = module.exports = db.define('user', {
 	lname: {
 		type: Sequelize.DataTypes.STRING,
 		defaultValue: null
-	},
-	createdAt: {
-		type: Sequelize.DataTypes.DATE,
-		defaultValue: null
-	},
-	updatedAt: {
-		type: Sequelize.DataTypes.DATE,
-		defaultValue: null
-	},
-	deletedAt: {
-		type: Sequelize.DataTypes.DATE,
-		defaultValue: null
 	}
-}, {
-	paranoid: true
 });
 
 User.extractReturnableFields = function(data, internalOnly = false) {
@@ -47,15 +33,12 @@ User.extractReturnableFields = function(data, internalOnly = false) {
 	return output;
 }
 
-function _extractReturnableFields(user, internalOnly) {
+function _extractReturnableFields(user) {
 	const output = {
 		id: user.id,
 		fname: user.fname,
 		lname: user.lname
 	};
-	if (user.deletedAt) {
-		output.deletedAt = user.deletedAt;
-	}
 
 	return output;
 }
