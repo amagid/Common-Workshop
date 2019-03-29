@@ -8,7 +8,6 @@ const db = require('./services/mysql');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
-const socketIO = require('socket.io');
 
 const startup = db.connect()
     .then((connection) => {
@@ -23,8 +22,6 @@ const startup = db.connect()
 
 function startServer() {
     const server = http.Server(app);
-    //Set up SocketIO server for realtime services
-    const socketServer = socketIO(server);
 
     server.on('error', function(err) {
         //If the address is already in use
@@ -56,7 +53,7 @@ function startServer() {
     server.listen(process.env.PORT || config.app.port);
     logger.info({ message: `Server listening on port ${process.env.PORT || config.app.port}` });
 
-    return { server, socketServer };
+    return server;
 }
 
 function setUpAPI() {
