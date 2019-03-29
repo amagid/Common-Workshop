@@ -1,0 +1,26 @@
+{
+    "app": {
+        "port": 3000
+    },
+
+    "jwt": {
+        "expiresIn": "1h"
+    },
+
+    "db": {
+        "name": "common_workshop",
+        "username": "root",
+        "password": "g42wry1ky9l"
+    },
+
+    "password": {
+        "saltRounds": 8
+    },
+
+    "protectedFields": ["password", "pass", "newPass", "newPassConf", "oldPass", "hash", "username", "secret", "signature", "initVector"],
+
+    "urls": {
+        "baseUrl": "http://localhost:3001/",
+        "uiBaseUrl": "http://localhost:3001/"
+    }
+}
