@@ -8,6 +8,7 @@ const db = require('./services/mysql');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
+const responsePromise = require('./middlewares/response-promise');
 
 const startup = db.connect()
     .then((connection) => {
@@ -74,6 +75,7 @@ function setUpAPI() {
         type: 'application/octet-stream'
     }));
     app.use(cors());
+    app.use(responsePromise);
     //Mount routes
     const router = express.Router();
     routes(router);

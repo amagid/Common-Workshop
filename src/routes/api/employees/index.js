@@ -1,28 +1,27 @@
 const employees = require('./employees');
 const validate = require('../../../middlewares/validate');
 const validators = require('./validators');
-const respond = require('../../../middlewares/respond');
 
 module.exports = function mountEmployees(router) {
 
     router.post('/',
         validate(validators.createEmployee),
-        respond((req, res) => employees.createEmployee(req.body)));
+        (req, res) => res.promise(employees.createEmployee(req.body)));
 
     router.get('/',
         validate(validators.getAllEmployees),
-        respond((req, res) => employees.getAllEmployees()));
+        (req, res) => res.promise(employees.getAllEmployees()));
 
     router.get('/:employeeId',
         validate(validators.getEmployeeInfo),
-        respond((req, res) => employees.getEmployeeInfo(req.params.employeeId)));
+        (req, res) => res.promise(employees.getEmployeeInfo(req.params.employeeId)));
 
     router.patch('/:employeeId',
         validate(validators.updateEmployee),
-        respond((req, res) => employees.updateEmployee(req.params.employeeId, req.body)));
+        (req, res) => res.promise(employees.updateEmployee(req.params.employeeId, req.body)));
 
     router.delete('/:employeeId',
         validate(validators.deleteEmployee),
-        respond((req, res) => employees.deleteEmployee(req.params.employeeId)));
+        (req, res) => res.promise(employees.deleteEmployee(req.params.employeeId)));
 
 };
