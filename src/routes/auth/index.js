@@ -2,7 +2,6 @@ const auth = require('./auth');
 const validate = require('../../middlewares/validate');
 const validators = require('./validators');
 const requirePermissionLevel = require('../../middlewares/require-permission-level');
-const ensureOwnership = require('../../middlewares/ensure-ownership');
 const respond = require('../../middlewares/respond');
 
 module.exports = function mountAuth(router) {
@@ -41,6 +40,5 @@ module.exports = function mountAuth(router) {
     router.patch('/update-password/:userId',
         requirePermissionLevel.admin,
         validate(validators.updatePassword),
-        (req, res, next) => { ensureOwnership(req, res, next, "user", req.params.userId); },
         respond((req, res) => auth.updatePassword(req.params.userId, req.body.oldPass, req.body.newPass, req.body.newPassConfirm)));
 };

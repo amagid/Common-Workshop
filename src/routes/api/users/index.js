@@ -2,7 +2,6 @@ const users = require('./users');
 const validate = require('../../../middlewares/validate');
 const validators = require('./validators');
 const requirePermissionLevel = require('../../../middlewares/require-permission-level');
-const ensureOwnership = require('../../../middlewares/ensure-ownership');
 const respond = require('../../../middlewares/respond');
 
 module.exports = function mountUsers(router) {
@@ -40,31 +39,26 @@ module.exports = function mountUsers(router) {
     router.patch('/:userId',
         requirePermissionLevel.admin,
         validate(validators.updateUser),
-        (req, res, next) => { ensureOwnership(req, res, next, "user", req.params.userId); },
         respond((req, res) => users.updateUser(req.params.userId, req.body)));
 
     router.patch('/:userId/permission',
         requirePermissionLevel.admin,
         validate(validators.updateUserPermission),
-        (req, res, next) => { ensureOwnership(req, res, next, "user", req.params.userId); },
         respond((req, res) => users.updateUserPermission(req.params.userId, req.body.role, req.user.role)));
 
     router.delete('/:userId',
         requirePermissionLevel.admin,
         validate(validators.deleteUser),
-        (req, res, next) => { ensureOwnership(req, res, next, "user", req.params.userId) },
         respond((req, res) => users.deleteUser(req.params.userId, false)));
 
     router.delete('/:userId/force',
         requirePermissionLevel.admin,
         validate(validators.deleteUser),
-        (req, res, next) => { ensureOwnership(req, res, next, "user", req.params.userId) },
         respond((req, res) => users.deleteUser(req.params.userId, true)));
 
     router.patch('/:userId/restore',
         requirePermissionLevel.admin,
         validate(validators.restoreUser),
-        (req, res, next) => { ensureOwnership(req, res, next, "user", req.params.userId) },
         respond((req, res) => users.restoreUser(req.params.userId)));
 
 };
